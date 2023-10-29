@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <cstdio>    // printf(), scanf()
 #include <ctime>
+#include <set>
 
 using namespace std;
 
@@ -132,14 +133,18 @@ bool test_sorting(vector<T> &v) {
 
 int main() {
     node<int> n1(3);
-    bTree<int> t;
+    bTree<uint32_t> t;
+    std::set<uint32_t> s;
 
     //cout << "Node is: " << n1 << '\n';
-    //bTree<int>::insert(t.root, 3);
+    //bTree<uint32_t>::insert(t.root, 3);
 
     srand(time(NULL));
 
-    int N_SAMPLES = 10000000;
+    int N_SAMPLES = 5;
+    
+    uint32_t S=923092883, P=976061291, Q=1205350525,
+    	sample, mask = (1u << 31);
 
     /*vector<int> v2;
     for (int k=0; k<N_SAMPLES; k++) {
@@ -149,14 +154,18 @@ int main() {
     return 0;*/
 
     for (int k=0; k<N_SAMPLES; k++) {
-        t.insert(rand() % 1000);
+    	if (k==0) sample = S; else sample = (sample*P+Q)%mask;
+        t.insert(sample);
+        //s.insert(sample);
     }
+	//return 0;
 
-    vector<int> v;
+    vector<uint32_t> v;
     t.dump(v);
 
     // test if v is correctly sorted
-    cout << (test_sorting<int>(v) ? "PASSED" : "FAILED") << '\n';
+    cout << (test_sorting<uint32_t>(v) ? "PASSED" : "FAILED") << '\n';
+    cout << v.size() << " samples in total.\n";
 
     return 0;
 }
